@@ -19,7 +19,7 @@ resource "google_compute_network" "vpc_network1" {
 }
 resource "google_compute_subnetwork" "subnet1" {
   name          = "test-subnetwork1"
-  ip_cidr_range = "10.2.0.0/16"
+  ip_cidr_range = "10.1.0.0/24"
   region        = var.region
   network       = google_compute_network.vpc_network1.id
   /* secondary_ip_range {
@@ -29,10 +29,21 @@ resource "google_compute_subnetwork" "subnet1" {
 }
 
 output "vpc" {
-  value = [google_compute_network.vpc_network]  
+  value = [google_compute_network.vpc_network]
 }
 output "vpc1" {
   value = google_compute_network.vpc_network1
-    
+}
+
+resource "google_compute_network_peering" "peering1" {
+  name         = "peering1"
+  network      = google_compute_network.vpc_network.self_link
+  peer_network = google_compute_network.vpc_network1.self_link
+}
+
+resource "google_compute_network_peering" "peering2" {
+  name         = "peering2"
+  network      = google_compute_network.vpc_network1.self_link
+  peer_network = google_compute_network.vpc_network.self_link
 }
 
