@@ -19,3 +19,8 @@ variable "access" {
   default     = "../root-welder-383716-da9dc216f477.json"
   description = "(optional) describe your variable"
 }
+variable "prov" {
+  type        = string
+  description = "(optional) describe your variable"
+  default     = "google"
+}
