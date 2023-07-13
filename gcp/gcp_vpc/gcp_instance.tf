@@ -14,11 +14,6 @@ resource "google_compute_instance" "gcptest" {
     }
   }
 
-  // Local SSD disk
-  /* scratch_disk {
-    interface = "SCSI"
-  } */
-
   network_interface {
     network = "default"
 
@@ -28,9 +23,22 @@ resource "google_compute_instance" "gcptest" {
     }
   }
 
-  /* metadata = {
-    foo = "bar"
+}
+
+resource "google_compute_firewall" "gcp_firewall" {
+  name    = "test-firewall"
+  network = google_compute_network.vpc_lb.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
   }
-  metadata_startup_script = "echo hi > /test.txt" */
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "8080", "1000-2000"]
+  }
+
+  source_tags = ["web"]
 }
 
