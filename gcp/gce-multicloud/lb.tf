@@ -1,3 +1,5 @@
+data "google_compute_zones" "available" {
+}
 resource "google_compute_instance_group_manager" "galaxy_mig" {
   name     = "${var.name}-mig1"
   version {
