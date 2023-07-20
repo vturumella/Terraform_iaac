@@ -2,6 +2,9 @@ data "google_compute_zones" "available" {
 }
 resource "google_compute_instance_group_manager" "galaxy_mig" {
   name     = "${var.name}-mig1"
+  project = var.project
+  count = length(data.google_compute_zones.available.names)
+  zone         = data.google_compute_zones.available.names[count.index]
   version {
     instance_template = google_compute_instance_template.galaxy_ws_template.id
     name              = "primary"
@@ -12,8 +15,8 @@ resource "google_compute_instance_group_manager" "galaxy_mig" {
 resource "google_compute_autoscaler" "galaxy_autoscaler" {
   name   = "${var.name}-autoscaler"
   count  = length(data.google_compute_zones.available.names)
-  zone   = var.zone
-  target = google_compute_instance_group_manager.galaxy_mig.id
+  zone   = data.google_compute_zones.available.names[count.index]
+  target = "${element(google_compute_instance_group_manager.galaxy_mig.*.self_link,count.index)}"
 
   autoscaling_policy {
     max_replicas    = 2
@@ -51,29 +54,23 @@ resource "google_compute_http_health_check" "galaxy_health_check" {
   request_path = "/"
   port         = 80
 }
-resource "google_compute_forwarding_rule" "galaxy_forwarding_rule" {
-  name                  = "${var.name}-forwarding-rule"
-  region                = var.region
-  depends_on            = [google_compute_subnetwork.galaxy_subnet]
-  ip_protocol           = "TCP"
-  load_balancing_scheme = "INTERNAL_MANAGED"
-  port_range            = "80"
-  target                = google_compute_region_target_http_proxy.galaxy_http_proxy.id
-  network               = google_compute_network.galaxy_vpc.id
-  subnetwork            = google_compute_subnetwork.galaxy_subnet.id
-  network_tier          = "PREMIUM"
-}
-
-# HTTP target proxy
-resource "google_compute_region_target_http_proxy" "galaxy_http_proxy" {
-  name    = "l7-ilb-target-http-proxy"
-  region  = "europe-west1"
-  url_map = google_compute_region_url_map.galaxy_url_map.id
+resource "google_compute_target_http_proxy" "galaxy_http_proxy" {
+  name     = "${var.name}-target-http-proxy"
+ 
+  url_map  = google_compute_url_map.galaxy_url_map.self_link
 }
 
 # URL map
-resource "google_compute_region_url_map" "galaxy_url_map" {
-  name            = "4{var.name}-regional-url-map"
-  region          = var.region
-  default_service = google_compute_backend_service.galaxy_backend_service.id
+resource "google_compute_url_map" "galaxy_url_map" {
+  name            = "${var.name}-al-url-map"
+ 
+  project = var.project
+  default_service = "${google_compute_backend_service.galaxy_backend_service.self_link}"
+}
+
+resource "google_compute_global_forwarding_rule" "galaxy_forwarding_rule" {
+  name                  = "${var.name}-forwarding-rule"
+  project = var.project
+  port_range            = "80"
+  target                = google_compute_target_http_proxy.galaxy_http_proxy.self_link
 }

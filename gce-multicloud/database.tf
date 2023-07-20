@@ -1,7 +1,6 @@
 resource "random_id" "db_name_suffix" {
   byte_length = 4
 }
-
 resource "google_sql_database" "galaxy_mysqldb" {
   name            = "${var.name}-mysql-database"
   instance        = google_sql_database_instance.galaxy_mysqldb_instance.name

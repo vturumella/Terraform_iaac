@@ -1,5 +1,6 @@
 resource "google_compute_instance_template" "galaxy_ws_template" {
     name        = "${var.name}-template"
+    project = var.project
     description = "This template is used to create app server instances."
 
     labels = {
@@ -16,7 +17,7 @@ resource "google_compute_instance_template" "galaxy_ws_template" {
     }
 
     network_interface {
-        network = google_compute_network.galaxy_vpc.id
+        subnetwork = google_compute_subnetwork.galaxy_subnet.self_link
     }
     metadata = {
         foo = "bar"
