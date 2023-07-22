@@ -16,7 +16,6 @@ resource "google_compute_instance" "gke_instance" {
       }
     }
   }
-
   network_interface {
     subnetwork = google_compute_subnetwork.k8s_subnet.self_link
 
@@ -24,8 +23,27 @@ resource "google_compute_instance" "gke_instance" {
       // Ephemeral public IP
     }
   }
-
   metadata = {
     foo = "bar"
   }
+}
+resource "google_sql_database" "mysql_k8s_database" {
+  name     = "${var.name}-database"
+  instance = google_sql_database_instance.k8s_instance.name
+}
+
+resource "google_sql_database_instance" "k8s_instance" {
+  name             = "${var.name}-database-instance"
+  region           = "us-central1"
+  database_version = "MYSQL_8_0"
+  settings {
+    tier = "db-f1-micro"
+  }
+  deletion_protection = "false"
+}
+resource "google_sql_user" "mysql_k8s_users" {
+  name     = "$[var.name}-users"
+  instance = google_sql_database_instance.k8s_instance.name
+  # host     = "me.com"
+  password = "admin"
 }

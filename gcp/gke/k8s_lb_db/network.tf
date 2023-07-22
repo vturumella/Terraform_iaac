@@ -16,7 +16,7 @@ resource "google_compute_router_nat" "k8s_nat" {
   }
 }
 resource "kubernetes_service" "k8s_service" {
-  depends_on = [null_resource.nullremote ]
+  depends_on = [null_resource.nullremote]
   metadata {
     name = "terraform-k8s-service"
   }
@@ -35,7 +35,7 @@ resource "kubernetes_service" "k8s_service" {
 }
 
 resource "kubernetes_pod" "k8s_pod" {
-  depends_on = [ null_resource.nullremote ]
+  depends_on = [null_resource.nullremote]
   metadata {
     name = "terraform-k8s-pod"
     labels = {

@@ -12,13 +12,13 @@ resource "google_container_cluster" "k8s_primary" {
   subnetwork               = google_compute_subnetwork.k8s_subnet.self_link
   logging_service          = "logging.googleapis.com/kubernetes"
   monitoring_service       = "monitoring.googleapis.com/kubernetes"
-  project = var.project
+  project                  = var.project
   master_auth {
     # username = ""
     # password = ""
 
-  client_certificate_config {
-    issue_client_certificate = false
+    client_certificate_config {
+      issue_client_certificate = false
     }
   }
 }
@@ -32,12 +32,12 @@ resource "google_container_node_pool" "k8s_primary_nodes" {
   node_config {
     oauth_scopes = [
       "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring"]
+    "https://www.googleapis.com/auth/monitoring"]
   }
 }
 
 resource "null_resource" "nullremote" {
   depends_on = [google_container_cluster.k8s_primary]
-  provisioner "local-exec" { command = "gcloud container clusters get-credentials ${google_container_cluster.k8s_primary.name} --zone ${google_container_cluster.k8s_primary.location} --project ${google_container_cluster.k8s_primary.project}"}
+  provisioner "local-exec" { command = "gcloud container clusters get-credentials ${google_container_cluster.k8s_primary.name} --zone ${google_container_cluster.k8s_primary.location} --project ${google_container_cluster.k8s_primary.project}" }
 }
-  
+
