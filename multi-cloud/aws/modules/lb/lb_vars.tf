@@ -1,0 +1,11 @@
+variable "access" { default = "AKIA2AUBABPJN4SY7DVA" }
+variable "secret_key" { default = "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" }
+variable "region" { default = "us-east-1" }
+variable "name" { default = "xcloud-multicloud" }
+variable "subnet_id" {default = "module.vpc.subnet_id"}
+variable "vpc_id" {default = "module.vpc.vpc_id" }
+variable "cidr_block" { default = ["0.0.0.0/0"] }
+variable "image_id" { default = "ami-05548f9cecf47b442" }
+variable "azn_cnt" { default = 2}
+variable "azn" { default = ["us-east-1a","us-east-1b","us-east-1d"]}
+variable "subnet1_id" {default = "module.vpc.subnet1_id"}
