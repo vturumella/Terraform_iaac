@@ -1,5 +1,5 @@
-variable "access" { default = "AKIAUXVOEN7YR763FKT3" }
-variable "secret_key" { default = "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" }
+variable "access" { default = "AKIAULKNSSKSTYIJOEHU" }
+variable "secret_key" { default = "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" }
 variable "region" { default = "us-east-1" }
 variable "name" { default = "xcloud-multicloud" }
 variable "vpc-name" { default = "module.vpc.vpc-name" }

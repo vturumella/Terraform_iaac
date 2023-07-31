@@ -3,10 +3,9 @@ data "aws_availability_zones" "available" {
 }
 resource "aws_elb" "xcloud_elb" {
   name               = "foobar-terraform-elb"
+  # count = length(var.azn_cnt)
+  availability_zones = toset(var.azn)
   # subnets = [var.subnet_id,var.subnet1_id]
-  subnets            = [for subnet in var.subnet_id : subnet.id]
-  # count = var.azn_cnt
-  # availability_zones = var.azn
   listener {
     instance_port     = 8000
     instance_protocol = "http"

@@ -1,5 +1,5 @@
-variable "access" { default = "AKIA2AUBABPJN4SY7DVA" }
-variable "secret_key" { default = "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" }
+variable "access" { default = "AKIAULKNSSKSTYIJOEHU" }
+variable "secret_key" { default = "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" }
 variable "region" { default = "us-east-1" }
 variable "name" { default = "xcloud-multicloud" }
 variable "subnet_id" {default = "module.vpc.subnet_id"}

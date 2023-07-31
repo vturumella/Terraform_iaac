@@ -1,11 +1,8 @@
-data "aws_availability_zones" "available" {
-  state = "available"
-}
 resource "aws_subnet" "xcloud_subnet" {
   vpc_id     = aws_vpc.xcloud_vpc.id
-  count = var.azn_cnt
+  cidr_block = "10.20.${10+count.index}.0/24"
+  count = length(data.aws_availability_zones.available.names)
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block = cidrsubnet(var.vpc_cidr,8,count.index)
 
   tags = {
     Name = "Main"
@@ -13,9 +10,9 @@ resource "aws_subnet" "xcloud_subnet" {
 }
 resource "aws_subnet" "xcloud_subnet1" {
   vpc_id     = aws_vpc.xcloud_vpc.id
-  count = var.azn_cnt
+  cidr_block = "10.20.${20+count.index}.0/24"
+  count = length(data.aws_availability_zones.available.names)
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block = cidrsubnet(var.vpc_cidr,8,count.index)
 
   tags = {
     Name = "Main"
@@ -36,11 +33,11 @@ resource "aws_security_group" "xcloud_sg" {
   vpc_id      = aws_vpc.xcloud_vpc.id
 
   ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = var.cidr_block
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = var.cidr_block
   }
 
   egress {
@@ -90,17 +87,15 @@ resource "aws_route_table_association" "xcloud_rta" {
   subnet_id      = aws_subnet.xcloud_subnet[0].id
   route_table_id = aws_route_table.xcloud_rt.id
 }
-# resource "aws_route_table_association" "xcloud_rtb" {
-#   gateway_id     = aws_internet_gateway.xcloud_gw.id
-#   route_table_id = aws_route_table.xcloud_rt.id
-# }
+
 resource "aws_eip" "xcloud_eip" {
-  
+
 }
 resource "aws_route" "xcloud_rt" {
-  route_table_id            = aws_route_table.xcloud_rt.id
-  destination_cidr_block    = var.vpc_cidr
-  nat_gateway_id = aws_nat_gateway.xcloud_nat.id
+  route_table_id         = aws_route_table.xcloud_rt.id
+  destination_cidr_block = "10.0.0.0/22"
+  nat_gateway_id         = aws_nat_gateway.xcloud_nat.id
+  # count = length(data.aws_availability_zones.available.names)
   # vpc_peering_connection_id = "pcx-45ff3dc1"
   # depends_on                = [aws_route_table.testing]
 }
