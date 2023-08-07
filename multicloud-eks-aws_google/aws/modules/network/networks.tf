@@ -6,31 +6,46 @@ resource "aws_vpc" "stratos-vpc" {
     Tier = "public"
   }
 }
-resource "aws_subnet" "stratos-subnet" {
+resource "aws_subnet" "stratos_subnet_public" {
   vpc_id            = aws_vpc.stratos-vpc.id
-  count             = length(data.aws_availability_zones.available.names)
+  count             = var.zone_cnt
   availability_zone = data.aws_availability_zones.available.names[count.index]
   cidr_block        = "10.20.${10 + count.index}.0/24"
+  map_public_ip_on_launch = true
 
 
   tags = {
     tier = "public"
   }
 }
-resource "aws_subnet" "stratos-subnet1" {
+resource "aws_subnet" "stratos_subnet_private" {
   vpc_id            = aws_vpc.stratos-vpc.id
-  count             = length(data.aws_availability_zones.available.names)
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  count             = var.zone_cnt
+  availability_zone = var.azn[count.index]
   cidr_block        = "10.20.${20 + count.index}.0/24"
 
   tags = {
     Name = "Main"
   }
 }
+# resource "aws_network_interface" "stratos_eni" {
+#   subnet_id       = aws_subnet.stratos_subnet_public[0].id
+#   security_groups = [aws_security_group.stratos-sg.id]
+  
+#   # attachment {
+#   #   instance     = var.instance_id
+#   #   device_index = 1
+#   # }
+# }
+
 resource "aws_security_group" "stratos-sg" {
   name        = "${var.name}-sg"
   description = "Allow TLS inbound traffic"
   vpc_id      = aws_vpc.stratos-vpc.id
+  
+  lifecycle {
+    create_before_destroy = true
+  }
 
   ingress {
     description = "TLS from VPC"
@@ -59,14 +74,14 @@ resource "aws_internet_gateway" "stratos-gw" {
 }
 resource "aws_nat_gateway" "stratos-nat" {
   allocation_id = aws_eip.stratos-eip.id
-  subnet_id     = aws_subnet.stratos-subnet[0].id
+  subnet_id     = aws_subnet.stratos_subnet_public[0].id
 
   tags = {
     Name = "gw NAT"
   }
 }
 resource "aws_route_table_association" "stratos-ra" {
-  subnet_id      = aws_subnet.stratos-subnet[0].id
+  subnet_id      = aws_subnet.stratos_subnet_public[0].id
   route_table_id = aws_route_table.stratos-rt.id
 }
 resource "aws_route_table" "stratos-rt" {
@@ -86,8 +101,9 @@ resource "aws_networkfirewall_firewall" "stratos-firewall" {
   name                = "${var.name}-firewall"
   firewall_policy_arn = aws_networkfirewall_firewall_policy.stratos-firewall-policy.arn
   vpc_id              = aws_vpc.stratos-vpc.id
+  delete_protection   = false
   subnet_mapping {
-    subnet_id = aws_subnet.stratos-subnet[0].id
+    subnet_id = aws_subnet.stratos_subnet_public[0].id
   }
 
   tags = {
@@ -97,6 +113,7 @@ resource "aws_networkfirewall_firewall" "stratos-firewall" {
 }
 resource "aws_networkfirewall_firewall_policy" "stratos-firewall-policy" {
   name = "${var.name}-firewall-policy"
+
   firewall_policy {
     stateless_default_actions          = ["aws:pass"]
     stateless_fragment_default_actions = ["aws:drop"]

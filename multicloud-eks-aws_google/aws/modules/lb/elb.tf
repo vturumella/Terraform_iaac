@@ -1,3 +1,16 @@
+resource "aws_instance" "stratos_web_instance" {
+  ami           = var.image
+  instance_type = var.instance_type
+  count         = 2
+  # network_interface {
+  #   delete_on_termination = true
+  #   device_index = o
+  # }
+
+  tags = {
+    Name = "HelloWorld"
+  }
+}
 resource "aws_elb" "stratos-elb" {
   name = "${var.name}-elb"
   # count              = var.zone_cnt
@@ -16,8 +29,7 @@ resource "aws_elb" "stratos-elb" {
     target              = "HTTP:8000/"
     interval            = 30
   }
-
-  #   instances                   = [aws_instance.foo.id]
+  instances                   = [aws_instance.stratos_web_instance[0].id,aws_instance.stratos_web_instance[1].id]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true
@@ -41,7 +53,7 @@ resource "aws_autoscaling_group" "bar" {
   name                 = "${var.name}-autoscale"
   launch_configuration = aws_launch_configuration.stratos-conf.name
   force_delete         = true
-  availability_zones = var.azn
+  availability_zones   = var.azn
   min_size             = 1
   max_size             = 2
 

@@ -1,6 +1,35 @@
+resource "aws_iam_role" "stratos-fargate-admin" {
+  name = "${var.name}-eks-fargate-profile"
+
+  assume_role_policy = jsonencode({
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "eks-fargate-pods.amazonaws.com"
+      }
+    }]
+    Version = "2012-10-17"
+  })
+}
+resource "aws_iam_role" "stratos-eks-node" {
+  name = "${var.name}-eks-node"
+
+  assume_role_policy = jsonencode({
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+    Version = "2012-10-17"
+  })
+}
 resource "aws_iam_user" "stratos-eks-admin" {
-  name = "${var.name}-admin"
-  path = "/"
+  name          = "${var.name}-admin"
+  path          = "/"
+  force_destroy = true
 
   tags = {
     tag-key = "tag-value"
@@ -34,6 +63,7 @@ output "secret" {
 
 resource "aws_iam_role" "stratos-eks-admin-role" {
   name = "${var.name}-role"
+
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -94,13 +124,10 @@ resource "aws_iam_policy" "stratos-policy" {
     ]
   })
 }
-resource "aws_iam_role_policy_attachment" "stratos-eks-policy-attach" {
-  role       = aws_iam_role.stratos-eks-admin-role.name
-  policy_arn = aws_iam_policy.stratos-policy.arn
-}
-output "iam_role_policy" {
-  value = aws_iam_role_policy.stratos.name
-}
-output "iam_role" {
-  value = aws_iam_role.stratos-eks-admin-role.name
-}
+# resource "aws_rds_cluster_role_association" "stratos-pgsql-role-assoc" {
+#     db_cluster_identifier = var.rds_cluster_identifier
+#     feature_name           = "S3_INTEGRATION"
+#     role_arn               = aws_eks_cluster.stratos-eks-cluster.arn
+# }
+
+
