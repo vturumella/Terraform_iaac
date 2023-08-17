@@ -1,0 +1,265 @@
+{
+  "version": 4,
+  "terraform_version": "1.5.3",
+  "serial": 257,
+  "lineage": "ed11e749-a1ad-cc89-0fcc-9110cd7bf0ce",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "data",
+      "type": "google_client_config",
+      "name": "default",
+      "provider": "provider[\"registry.terraform.io/hashicorp/google\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "access_token": "ya29.a0AfB_byBnKgVYIwYGs442U5w8RLVbnZtlc5ivJZRxtqPnbHc7xRlZStI8FqJSTG77yy7Z0_ei3WmyGpS2k4Fh-nnnF_CiB0r6SvN4c8-LWaXWWFcU_0a97PyliqfGEErAcd95lxqLJohGcG549a9SQf3rMjMSVWSh-u6vH3M6zgaCgYKAZASARASFQHsvYlshcDO3tU9_-ri5XMLyNXLKg0177",
+            "id": "projects/\"indigo-altar-345111\"/regions/\"us-east1\"/zones/\"us-east1-d\"",
+            "project": "indigo-altar-345111",
+            "region": "us-east1",
+            "zone": "us-east1-d"
+          },
+          "sensitive_attributes": []
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "google_container_cluster",
+      "name": "my_cluster",
+      "provider": "provider[\"registry.terraform.io/hashicorp/google\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "addons_config": [
+              {
+                "cloudrun_config": [],
+                "config_connector_config": [],
+                "dns_cache_config": [],
+                "gce_persistent_disk_csi_driver_config": [
+                  {
+                    "enabled": true
+                  }
+                ],
+                "gcp_filestore_csi_driver_config": [],
+                "gcs_fuse_csi_driver_config": [],
+                "gke_backup_agent_config": [],
+                "horizontal_pod_autoscaling": [],
+                "http_load_balancing": [],
+                "network_policy_config": [
+                  {
+                    "disabled": true
+                  }
+                ]
+              }
+            ],
+            "allow_net_admin": null,
+            "authenticator_groups_config": [],
+            "binary_authorization": [
+              {
+                "enabled": false,
+                "evaluation_mode": ""
+              }
+            ],
+            "cluster_autoscaling": [
+              {
+                "auto_provisioning_defaults": [],
+                "enabled": false,
+                "resource_limits": []
+              }
+            ],
+            "cluster_ipv4_cidr": "10.0.0.0/14",
+            "confidential_nodes": [],
+            "cost_management_config": [],
+            "database_encryption": [
+              {
+                "key_name": "",
+                "state": "DECRYPTED"
+              }
+            ],
+            "datapath_provider": "",
+            "default_max_pods_per_node": null,
+            "default_snat_status": [
+              {
+                "disabled": false
+              }
+            ],
+            "description": "",
+            "dns_config": [],
+            "enable_autopilot": false,
+            "enable_binary_authorization": false,
+            "enable_intranode_visibility": false,
+            "enable_k8s_beta_apis": [],
+            "enable_kubernetes_alpha": false,
+            "enable_l4_ilb_subsetting": false,
+            "enable_legacy_abac": false,
+            "enable_shielded_nodes": true,
+            "enable_tpu": false,
+            "endpoint": "35.194.11.125",
+            "gateway_api_config": [],
+            "id": "projects/indigo-altar-345111/locations/us-central1-a/clusters/my-gke-cluster",
+            "initial_node_count": 1,
+            "ip_allocation_policy": [],
+            "label_fingerprint": "a9dc16a7",
+            "location": "us-central1-a",
+            "logging_config": [
+              {
+                "enable_components": [
+                  "SYSTEM_COMPONENTS",
+                  "WORKLOADS"
+                ]
+              }
+            ],
+            "logging_service": "logging.googleapis.com/kubernetes",
+            "maintenance_policy": [],
+            "master_auth": [
+              {
+                "client_certificate": "",
+                "client_certificate_config": [
+                  {
+                    "issue_client_certificate": false
+                  }
+                ],
+                "client_key": "",
+                "cluster_ca_certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVMVENDQXBXZ0F3SUJBZ0lSQU5ibUFvZWhDQU1LSExYVzJEVUhKYnd3RFFZSktvWklodmNOQVFFTEJRQXcKTHpFdE1Dc0dBMVVFQXhNa1lqWTVZemxrT1RFdE1HTmtOQzAwTnpFekxXSmtZVEF0Tm1FNE56ZG1PRFV4TlRJeApNQ0FYRFRJek1EZ3hOVEF6TlRrek5Gb1lEekl3TlRNd09EQTNNRFExT1RNMFdqQXZNUzB3S3dZRFZRUURFeVJpCk5qbGpPV1E1TVMwd1kyUTBMVFEzTVRNdFltUmhNQzAyWVRnM04yWTROVEUxTWpFd2dnR2lNQTBHQ1NxR1NJYjMKRFFFQkFRVUFBNElCandBd2dnR0tBb0lCZ1FDWFVqNDZTUlFqSytBMGswYk44elZtdGhEclZtWWZoR2J4MlVpdAp1eFVyQkFYWWpwNXFocTl6eFBUOE5YOEV3bHlBR2t4WTU1VmtNbGxFcm9uVzZrc2FhbXBSd0ZoYzBNVWxHdlBDCjEyZ2xod3JUV3dLNU5OWDNONUVVOGNvTUFVMmpmZE9LWGJ6WXBUbGtrRGxScFVCeExxdVRGMzR6TTVIL0NDOFgKWmhqdC9zZFp0L0RGQ2xlNjkzQnFsZkVEejBkMllaZDFNQWR2OTYzbjFQZUxvdGIwb1VseGJkZnBETXRSVnovdwo4SHp0alJZdmVsVTZuRDhtZ0NwV0prNk5iUU9IcVZ1Mlcwcmk0anB3TDFtV2EvT0lwSVQyQUZkL2VoTXNsN0hpCnp0SEErM3hwcjlKcUtpR3pVNzlBVlMzNHp2WlpORG1QdFhld0RTckFPZlo4dEVEdXhodFM2NUFsc1c2dW9sMjYKbXBDOTd2QlpiRWlROCtCNVVLd2dHRHJUV3g4OGFaMUlIanpDK1JMWnVVOTkzUTdWUldNa0t2aEdtOWNEZ2kraQpkejN6TGZMam9kbUk0UzZGVXlFVmVmZFcwNHNtbFY1dTRYZExuN0NHNkM2czVPdjd6TzZhSXg0UmxLSkIrbHk1CnJDOXQyWXg3bURXS1FhZ21FZVBySTRPVmFBVUNBd0VBQWFOQ01FQXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1BOEcKQTFVZEV3RUIvd1FGTUFNQkFmOHdIUVlEVlIwT0JCWUVGS0lDMHJQMTZDR2Rsb3QzQjVPV0xzYzBUdTR0TUEwRwpDU3FHU0liM0RRRUJDd1VBQTRJQmdRQmxKK3dwRjUxMXVhSkhlbHAvTkFJV3ZhYzJtT0lUV2dzSlBHZmJ0VDdTCm5JOHprK1FxYUx1THZBdmc5V2thRURsbzIwUVFkM2JxUHBralhwMHgxTG9QeFg4aVVBcXJWNGo5d0dEYnFlM3cKaFJZeVc5ZDBvVnIzWHlwTWM4d1FyYXdaZHNKaHZCMUY0d0VCeGNsVjdNUllqSTdYcncwUm13bTRmam1RYWVDWApDY3NmZjRCZEJzaFFma0ZvSnRORktTcWkrU3UvTUZsSkdLeGhaMjhnZjhKQ2dGWG9odnZDaFptbEtob3ZGT2VjCnFzTElvZkZ4SVhWcUF1L2FSSXdhcjZEc283SnVOSmFjRjhqSFAyWlpvd3R2RmNudFJwRjFoZXptZ0NiaHBJeWkKYTNzQXBjbmlPTzVkT3ZlUlU3OXgxbkFLNHh1SEZHekNqZFBkc2phU0RnYzU0c29keWN2RTY4bTBrVkhkbExCZgpTT1hBMzdLdlhwU3lyT3pGUXFtRVBRUittbFlKc2dGenAvL1V4VzU3akZzZGZCOStMeE90RTNPTjFVWS9CSVZtClVoT05uUm82clN4UzRGelA4VGhqakE2VTBuZ1pnSnBqbXBOR2Z5bm0ycGJXMWtJRUQyc1kwUHNPNGV6bFFSVkYKTUhZTlAySlBGNndrV3MxL0NsNVJORkU9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+              }
+            ],
+            "master_authorized_networks_config": [],
+            "master_version": "1.27.3-gke.100",
+            "mesh_certificates": [],
+            "min_master_version": null,
+            "monitoring_config": [
+              {
+                "enable_components": [
+                  "SYSTEM_COMPONENTS"
+                ],
+                "managed_prometheus": [
+                  {
+                    "enabled": true
+                  }
+                ]
+              }
+            ],
+            "monitoring_service": "monitoring.googleapis.com/kubernetes",
+            "name": "my-gke-cluster",
+            "network": "projects/indigo-altar-345111/global/networks/default",
+            "network_policy": [
+              {
+                "enabled": false,
+                "provider": "PROVIDER_UNSPECIFIED"
+              }
+            ],
+            "networking_mode": "ROUTES",
+            "node_config": [],
+            "node_locations": [],
+            "node_pool": [],
+            "node_pool_defaults": [
+              {
+                "node_config_defaults": [
+                  {
+                    "logging_variant": "DEFAULT"
+                  }
+                ]
+              }
+            ],
+            "node_version": "1.27.3-gke.100",
+            "notification_config": [
+              {
+                "pubsub": [
+                  {
+                    "enabled": false,
+                    "filter": [],
+                    "topic": ""
+                  }
+                ]
+              }
+            ],
+            "operation": null,
+            "private_cluster_config": [
+              {
+                "enable_private_endpoint": false,
+                "enable_private_nodes": false,
+                "master_global_access_config": [
+                  {
+                    "enabled": false
+                  }
+                ],
+                "master_ipv4_cidr_block": "",
+                "peering_name": "",
+                "private_endpoint": "10.128.0.34",
+                "private_endpoint_subnetwork": "",
+                "public_endpoint": "35.194.11.125"
+              }
+            ],
+            "private_ipv6_google_access": "",
+            "project": "indigo-altar-345111",
+            "release_channel": [
+              {
+                "channel": "REGULAR"
+              }
+            ],
+            "remove_default_node_pool": true,
+            "resource_labels": {},
+            "resource_usage_export_config": [],
+            "security_posture_config": [
+              {
+                "mode": "MODE_UNSPECIFIED",
+                "vulnerability_mode": "VULNERABILITY_MODE_UNSPECIFIED"
+              }
+            ],
+            "self_link": "https://container.googleapis.com/v1/projects/indigo-altar-345111/zones/us-central1-a/clusters/my-gke-cluster",
+            "service_external_ips_config": [
+              {
+                "enabled": false
+              }
+            ],
+            "services_ipv4_cidr": "10.3.240.0/20",
+            "subnetwork": "projects/indigo-altar-345111/regions/us-central1/subnetworks/default",
+            "timeouts": null,
+            "tpu_ipv4_cidr_block": "",
+            "vertical_pod_autoscaling": [],
+            "workload_identity_config": []
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoyNDAwMDAwMDAwMDAwLCJkZWxldGUiOjI0MDAwMDAwMDAwMDAsInJlYWQiOjI0MDAwMDAwMDAwMDAsInVwZGF0ZSI6MzYwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9"
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "kubernetes_namespace",
+      "name": "test",
+      "provider": "provider[\"registry.terraform.io/hashicorp/kubernetes\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "nginx",
+            "metadata": [
+              {
+                "annotations": {},
+                "generate_name": "",
+                "generation": 0,
+                "labels": {},
+                "name": "nginx",
+                "resource_version": "3664",
+                "uid": "c6aa39e8-17ea-4e69-ac54-1e043941e3ab"
+              }
+            ],
+            "timeouts": null,
+            "wait_for_default_service_account": false
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjozMDAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "data.google_client_config.default",
+            "google_container_cluster.my_cluster"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
