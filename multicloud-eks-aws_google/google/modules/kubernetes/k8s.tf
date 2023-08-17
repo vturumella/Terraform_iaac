@@ -3,6 +3,19 @@ resource "google_container_cluster" "my_cluster" {
   location = "us-central1-a"
   subnetwork = var.private_subnet
   network = var.vpc_name
+  cluster_autoscaling {
+    enabled = true
+    resource_limits {
+      resource_type = "memory"
+      minimum = 1
+      maximum = 64
+    }
+    resource_limits {
+      resource_type = "cpu"
+      minimum = 4
+      maximum = 10
+    }
+  }
 
   # We can't create a cluster with no node pool defined, but we want to only use
   # separately managed node pools. So we create the smallest possible default
@@ -15,6 +28,7 @@ resource "google_container_node_pool" "primary_cluster_nodes" {
   location   = "us-central1-a"
   cluster    = google_container_cluster.my_cluster.name
   node_count = 1
+  
 
   node_config {
     preemptible  = true
@@ -26,6 +40,18 @@ resource "google_container_node_pool" "primary_cluster_nodes" {
     #   "https://www.googleapis.com/auth/cloud-platform"
     # ]
   }
+}
+resource "kubernetes_secret" "my_secret" {
+  metadata {
+    name = "basic-auth"
+  }
+
+  data = {
+    username = "admin"
+    password = "P4ssw0rd"
+  }
+
+  type = "kubernetes.io/basic-auth"
 }
 data "google_client_config" "default" {
 }
@@ -102,6 +128,58 @@ resource "kubernetes_service" "my_cluster_service" {
     }
 
     type = "LoadBalancer"
+  }
+}
+resource "kubernetes_pod" "my_pod" {
+  metadata {
+    name = "terraform-example"
+  }
+
+  spec {
+    container {
+      image = "nginx:1.21.6"
+      name  = "example"
+
+      env {
+        name  = "environment"
+        value = "test"
+      }
+
+      port {
+        container_port = 80
+      }
+
+      liveness_probe {
+        http_get {
+          path = "/"
+          port = 80
+
+          http_header {
+            name  = "X-Custom-Header"
+            value = "Awesome"
+          }
+        }
+
+        initial_delay_seconds = 3
+        period_seconds        = 3
+      }
+    }
+
+    dns_config {
+      nameservers = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
+      searches    = ["example.com"]
+
+      option {
+        name  = "ndots"
+        value = 1
+      }
+
+      option {
+        name = "use-vc"
+      }
+    }
+
+    dns_policy = "None"
   }
 }
 
