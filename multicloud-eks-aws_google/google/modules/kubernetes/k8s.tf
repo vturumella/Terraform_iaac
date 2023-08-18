@@ -1,19 +1,19 @@
 resource "google_container_cluster" "my_cluster" {
-  name     = "my-gke-cluster"
-  location = "us-central1-a"
-  subnetwork = var.private_subnet
-  network = var.vpc_name
+  name       = "my-gke-cluster"
+  location   = "us-central1-a"
+  subnetwork = var.my_subnet
+  network    = var.vpc_name
   cluster_autoscaling {
     enabled = true
     resource_limits {
       resource_type = "memory"
-      minimum = 1
-      maximum = 64
+      minimum       = 1
+      maximum       = 64
     }
     resource_limits {
       resource_type = "cpu"
-      minimum = 4
-      maximum = 10
+      minimum       = 4
+      maximum       = 10
     }
   }
 
@@ -28,7 +28,7 @@ resource "google_container_node_pool" "primary_cluster_nodes" {
   location   = "us-central1-a"
   cluster    = google_container_cluster.my_cluster.name
   node_count = 1
-  
+
 
   node_config {
     preemptible  = true
@@ -220,6 +220,55 @@ resource "kubernetes_ingress_v1" "gke_ingress" {
     }
   }
 }
+resource "kubernetes_network_policy" "my_network_policy" {
+  metadata {
+    name      = "my-network-policy"
+    namespace = kubernetes_namespace.test.id
+  }
+
+  spec {
+    pod_selector {
+      match_expressions {
+        key      = "name"
+        operator = "In"
+        values   = ["webfront", "api"]
+      }
+    }
+
+    ingress {
+      ports {
+        port     = "http"
+        protocol = "TCP"
+      }
+      ports {
+        port     = "8125"
+        protocol = "UDP"
+      }
+
+      from {
+        namespace_selector {
+          match_labels = {
+            name = "test"
+          }
+        }
+      }
+
+      from {
+        ip_block {
+          cidr = "10.0.0.0/8"
+          except = [
+            "10.0.0.0/24",
+            "10.0.1.0/24",
+          ]
+        }
+      }
+    }
+
+    egress {} # single empty rule to allow all egress traffic
+
+    policy_types = ["Ingress", "Egress"]
+  }
+}
 resource "kubernetes_namespace" "test" {
   metadata {
     name = "nginx"
@@ -227,7 +276,7 @@ resource "kubernetes_namespace" "test" {
   timeouts {
     delete = "15m"
   }
-  depends_on = [ google_container_node_pool.primary_cluster_nodes]
+  depends_on = [google_container_node_pool.primary_cluster_nodes]
 }
 resource "kubernetes_deployment" "test" {
   metadata {
@@ -241,7 +290,7 @@ resource "kubernetes_deployment" "test" {
         app = "MyTestApp"
       }
     }
-    
+
     template {
       metadata {
         labels = {

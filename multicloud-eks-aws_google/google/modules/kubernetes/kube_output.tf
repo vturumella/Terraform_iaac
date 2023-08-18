@@ -1,5 +1,5 @@
 output "host" {
-  value =google_container_cluster.my_cluster.endpoint
+  value = google_container_cluster.my_cluster.endpoint
 }
 output "token" {
   value = "data.google_client_config.default.access_token"

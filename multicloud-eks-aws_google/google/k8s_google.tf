@@ -1,7 +1,7 @@
 module "kubernetes" {
     source = "./modules/kubernetes"
     vpc_name = module.network.vpc_name
-    private_subnet = module.network.private_subnet
+    my_subnet = module.network.my_subnet
 }
 module "network" {
     source = "./modules/networks"
